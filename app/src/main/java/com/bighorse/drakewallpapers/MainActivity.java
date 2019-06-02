@@ -29,8 +29,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
     private static InterstitialAd mInterstitialVideoAd;
 
     static int videoAttempts = 0;
+    private FirebaseAuth mAuth;
 
     public static void addVideoAttempt() {
         videoAttempts++;
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
 
         FirebaseApp.initializeApp(this);
+        mAuth = FirebaseAuth.getInstance();
         mRecyclerView = findViewById(R.id.recyclerview);
         mProgressBar = findViewById(R.id.mainProgressbar);
 
@@ -181,6 +187,20 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // do your stuff
+        } else {
+            signInAnonymously();
+        }
+    }
+
+    private void signInAnonymously() {
+        mAuth.signInAnonymously();
+    }
 
 
 }

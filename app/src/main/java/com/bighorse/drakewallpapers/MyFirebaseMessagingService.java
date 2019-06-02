@@ -1,4 +1,7 @@
 package com.bighorse.drakewallpapers;
 
-public class MyFirebaseMessagingService {
+import com.google.firebase.messaging.FirebaseMessagingService;
+
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
+
 }
