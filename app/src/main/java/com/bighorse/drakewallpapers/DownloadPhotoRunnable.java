@@ -33,7 +33,7 @@ public class DownloadPhotoRunnable implements Runnable {
                 if(mypath.exists()){
                     Log.d(TAG, "Esiste già");
                 } else {
-                    Bitmap image = Utility.getBitmap(this.image.getUri(),mContext);
+                    Bitmap image = Utility.getBitmap(this.image.getUriWallpaperDownload(), mContext);
                     if(image != null) {
                         FileOutputStream fos = null;
                         try {

@@ -7,11 +7,10 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
-import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;

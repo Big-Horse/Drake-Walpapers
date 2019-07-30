@@ -1,18 +1,20 @@
 package com.bighorse.drakewallpapers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements ImageViewHolder.onImageClickedListener {
-    private List<ImageModel> imagesList = new ArrayList<>();
+    private ArrayList<ImageModel> imagesList = new ArrayList<>();
     private onImageClickedListener mListener;
+    int counter = 0;
 
     private Context mContext;
 
@@ -21,7 +23,7 @@ public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements Im
         this.mContext = context;
     }
 
-    public List<ImageModel> getList() {
+    public ArrayList<ImageModel> getList() {
         return imagesList;
     }
 
@@ -31,7 +33,7 @@ public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements Im
 
     public void addImage(ImageModel image){
         imagesList.add(image);
-        notifyItemInserted(imagesList.size() - 1);
+        //notifyItemInserted(imagesList.size() - 1);
         notifyDataSetChanged();
     }
 
@@ -46,9 +48,16 @@ public class Adapter extends RecyclerView.Adapter<ImageViewHolder> implements Im
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int i) {
-        ImageModel image = imagesList.get(i);
+    public void onBindViewHolder(@NonNull ImageViewHolder imageViewHolder, int position) {
+        if(counter == 3 || counter == 14){
+            ImageModel imageModel = new ImageModel();
+            imageModel.setUriThumbDownload("https://firebasestorage.googleapis.com/v0/b/drake-wallpapers.appspot.com/o/wallpapers%2Fbanner_ads.jpg?alt=media&token=3e94d30e-a23d-4950-a089-ebddbbdad85d");
+            imageModel.setUriWallpaperDownload("https://firebasestorage.googleapis.com/v0/b/drake-wallpapers.appspot.com/o/wallpapers%2Fbanner_ads.jpg?alt=media&token=3e94d30e-a23d-4950-a089-ebddbbdad85d");
+            imagesList.add(imageModel);
+        }
+        ImageModel image = imagesList.get(position);
         imageViewHolder.setImage(image, mContext);
+        counter ++;
     }
 
     @Override

@@ -4,10 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 
 class ImageOverlayView extends RelativeLayout {
+    private String uri;
     private Activity mActivity;
     private Context mContext;
     private TextView mDownloadTextView;
@@ -24,6 +25,7 @@ class ImageOverlayView extends RelativeLayout {
 
     private onImageOverlayClickedListener mListener;
     private String mFilename;
+    private ConstraintLayout mPlaceHolderImage;
 
     public void clickDownload() {
         mDownloadTextView.callOnClick();
@@ -32,14 +34,16 @@ class ImageOverlayView extends RelativeLayout {
     public interface onImageOverlayClickedListener{
         void onDownloadClicked(String mUriImage,String filename);
         void onSetClicked(String mUriImage, int type);
+        void onImageClicked(String mUriImage);
     }
 
 
-    public ImageOverlayView(Context context, Activity activity, onImageOverlayClickedListener listener) {
+    public ImageOverlayView(Context context, Activity activity, onImageOverlayClickedListener listener, String uri) {
         super(context);
         mActivity = activity;
         mContext = context;
         mListener = listener;
+        this.uri = uri;
         init();
     }
 
@@ -55,6 +59,13 @@ class ImageOverlayView extends RelativeLayout {
 
     public void setImage(String uriImage){
         mUriImageDownload = uriImage;
+        if(mUriImageDownload.equals(uri)){
+            mDownloadTextView.setText(mContext.getResources().getString(R.string.try_it));
+            mSetTextView.setText(mContext.getResources().getString(R.string.now));
+        } else {
+            mDownloadTextView.setText(mContext.getResources().getString(R.string.download));
+            mSetTextView.setText(mContext.getResources().getString(R.string.set));
+        }
     }
     public void setFilename(String filename){
         mFilename = filename;
@@ -83,6 +94,7 @@ class ImageOverlayView extends RelativeLayout {
                 }
             }
         });
+
     }
 
 }

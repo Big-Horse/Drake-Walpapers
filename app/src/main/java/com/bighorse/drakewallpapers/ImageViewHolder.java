@@ -1,18 +1,16 @@
 package com.bighorse.drakewallpapers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import android.view.View;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 
 class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private final ImageView mImageView;
+    private final SimpleDraweeView mImageView;
 
     private onImageClickedListener mListener;
 
@@ -31,12 +29,7 @@ class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
     }
 
     public void setImage(final ImageModel image, final Context context) {
-        GlideApp.with(context)
-                .load(image.getUriThumbDownload())
-                .centerCrop()
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mImageView);
+        mImageView.setImageURI(image.getUriThumbDownload());
     }
 
     @Override
@@ -45,6 +38,7 @@ class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
             mListener.onClick(getAdapterPosition());
         }
     }
+
 
 
 }

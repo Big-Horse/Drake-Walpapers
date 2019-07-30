@@ -7,4 +7,6 @@
     <string name="wallpaper_set">Wallpaper set</string>
 
     <string name="default_notification_channel_id" translatable="false">notification channel</string>
+    <string name="now">NOW!!!</string>
+    <string name="try_it">TRY IT</string>
 </resources>

@@ -1,47 +1,30 @@
 package com.bighorse.drakewallpapers;
 
-import android.Manifest;
-import android.app.DownloadManager;
-import android.app.WallpaperManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.facebook.common.util.UriUtil;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.stfalcon.frescoimageviewer.ImageViewer;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Adapter.onImageClickedListener, FirebaseController.FirebaseListener {
 
@@ -59,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     static int videoAttempts = 0;
     private FirebaseAuth mAuth;
+    private int counter = 1;
 
     public static void addVideoAttempt() {
         videoAttempts++;
@@ -75,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         mRecyclerView = findViewById(R.id.recyclerview);
@@ -90,13 +73,14 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         FirebaseController.getInstance().setListener(this);
         FirebaseController.getInstance().attachDatabaseListener();
 
-        MobileAds.initialize(this, "ca-app-pub-5005687032079051~8894641764");
+        MobileAds.initialize(this, "ca-app-pub-9750227298627262~4730480796");
 
         mAdMainBannerView = findViewById(R.id.adView);
         mAdMainBannerView.loadAd(new AdRequest.Builder().build());
 
         mInterstitialMainAd = new InterstitialAd(this);
-        mInterstitialMainAd.setAdUnitId("ca-app-pub-5005687032079051/6711455267");
+        //mInterstitialMainAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialMainAd.setAdUnitId("ca-app-pub-9750227298627262/2663694421");
         mInterstitialMainAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialMainAd.setAdListener(new AdListener() {
@@ -112,17 +96,16 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
         });
 
         mInterstitialVideoAd = new InterstitialAd(this);
-        mInterstitialVideoAd.setAdUnitId("ca-app-pub-5005687032079051/9007866993");
+        mInterstitialVideoAd.setAdUnitId("ca-app-pub-9750227298627262/7999781587");
 
     }
 
     @Override
     public void onClick(ImageModel image, int position) {
         Intent imageViewActivity = new Intent(this, ImageViewActivity.class);
-        imageViewActivity.putExtra("image", image);
+        imageViewActivity.putParcelableArrayListExtra("list", mAdapter.getList());
         imageViewActivity.putExtra("position", position);
         startActivity(imageViewActivity);
-
     }
 
 
@@ -158,11 +141,9 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
 
     @Override
     public void onChildAdded(final ImageModel image) {
-
         new Thread() {
             @Override
             public void run() {
-
                 final StorageReference[] storageReference = {FirebaseStorage.getInstance().getReference().child("thumbs/" + image.getUriThumb())};
                 storageReference[0].getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -182,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements Adapter.onImageCl
                         });
                     }
                 });
+
             }
         }.start();
 

@@ -1,10 +1,13 @@
 package com.bighorse.drakewallpapers;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
-public class ImageModel implements Serializable {
+public class ImageModel implements Parcelable {
 
     private String uri;
     private String uriThumb;
@@ -69,4 +72,37 @@ public class ImageModel implements Serializable {
         this.uriWallpaperDownload = uriWallpaperDownload;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uri);
+        dest.writeString(this.uriThumb);
+        dest.writeString(this.uriWallpaper);
+        dest.writeString(this.name);
+        dest.writeString(this.uriThumbDownload);
+        dest.writeString(this.uriWallpaperDownload);
+    }
+    public ImageModel(Parcel in){
+        this.uri = in.readString();
+        this.uriThumb = in.readString();
+        this.uriWallpaper = in.readString();
+        this.name = in.readString();
+        this.uriThumbDownload = in.readString();
+        this.uriWallpaperDownload = in.readString();
+
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public ImageModel createFromParcel(Parcel in) {
+            return new ImageModel(in);
+        }
+
+        public ImageModel[] newArray(int size) {
+            return new ImageModel[size];
+        }
+    };
 }
